@@ -1,12 +1,18 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import Hero from "@/components/Hero";
+import ExplanationSection from "@/components/ExplanationSection";
+import PracticeSection from "@/components/PracticeSection";
+import AnalyzerSection from "@/components/AnalyzerSection";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Hero />
+      <ExplanationSection />
+      <PracticeSection />
+      <AnalyzerSection />
+      <footer className="py-8 text-center text-muted-foreground">
+        <p className="text-base">© 2025 Összetett Mondatok Gyakorló</p>
+      </footer>
     </div>
   );
 };
