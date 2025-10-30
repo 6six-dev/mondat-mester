@@ -20,19 +20,25 @@ const exampleSentences = [
     sentence: "Azt mondta, hogy holnap jön.",
     type: "alárendelő",
     subtype: "tárgyi",
-    explanation: "A 'hogy' kötőszóval kezdődő mellékmondat a főmondat tárgyaként működik."
+    explanation: "A 'hogy' kötőszóval kezdődő mellékmondat a főmondat tárgyaként működik.",
+    mainClause: "Azt mondta",
+    subordinateClause: "hogy holnap jön"
   },
   {
     sentence: "Amikor hazaértem, már sötét volt.",
     type: "alárendelő",
     subtype: "időhatározói",
-    explanation: "Az 'amikor' kötőszóval kezdődő mellékmondat időbeli viszonyt fejez ki."
+    explanation: "Az 'amikor' kötőszóval kezdődő mellékmondat időbeli viszonyt fejez ki.",
+    mainClause: "már sötét volt",
+    subordinateClause: "Amikor hazaértem"
   },
   {
     sentence: "A könyv, amelyet tegnap olvastam, nagyon érdekes volt.",
     type: "alárendelő",
     subtype: "jelzői",
-    explanation: "Az 'amelyet' vonatkozó névmással kezdődő mellékmondat a főnevet jellemzi."
+    explanation: "Az 'amelyet' vonatkozó névmással kezdődő mellékmondat a főnevet jellemzi.",
+    mainClause: "A könyv nagyon érdekes volt",
+    subordinateClause: "amelyet tegnap olvastam"
   },
   {
     sentence: "Gyere el, vagy maradj otthon.",
@@ -50,7 +56,9 @@ const exampleSentences = [
     sentence: "Ha esik, otthon maradok.",
     type: "alárendelő",
     subtype: "feltételes",
-    explanation: "A 'ha' kötőszóval kezdődő mellékmondat feltételt fejez ki."
+    explanation: "A 'ha' kötőszóval kezdődő mellékmondat feltételt fejez ki.",
+    mainClause: "otthon maradok",
+    subordinateClause: "Ha esik"
   }
 ];
 
@@ -97,9 +105,22 @@ const PracticeSection = () => {
               <p className="text-lg mb-2 text-foreground">
                 <strong>Altípus:</strong> {currentExample.subtype}
               </p>
-              <p className="text-base text-muted-foreground">
+              <p className="text-base text-muted-foreground mb-3">
                 {currentExample.explanation}
               </p>
+              
+              {currentExample.type === 'alárendelő' && currentExample.mainClause && currentExample.subordinateClause && (
+                <div className="mt-4 space-y-3">
+                  <div className="bg-primary/5 p-4 rounded-lg border border-primary/20">
+                    <p className="text-sm font-semibold text-primary mb-1">Főmondat:</p>
+                    <p className="text-base text-foreground">{currentExample.mainClause}</p>
+                  </div>
+                  <div className="bg-accent/5 p-4 rounded-lg border border-accent/20">
+                    <p className="text-sm font-semibold text-accent mb-1">Mellékmondat:</p>
+                    <p className="text-base text-foreground">{currentExample.subordinateClause}</p>
+                  </div>
+                </div>
+              )}
             </div>
 
             <Button

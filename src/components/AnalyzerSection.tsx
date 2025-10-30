@@ -10,6 +10,8 @@ interface AnalysisResult {
   subtype: string;
   explanation: string;
   confidence: string;
+  mainClause?: string;
+  subordinateClause?: string;
 }
 
 const AnalyzerSection = () => {
@@ -63,11 +65,38 @@ const AnalyzerSection = () => {
     // Először alárendelő kötőszavakat keresünk (ezek erősebbek)
     for (const [word, data] of Object.entries(subordinating)) {
       if (sentence.includes(word)) {
+        // Megkeressük a kötőszó pozícióját
+        const conjunctionIndex = sentence.indexOf(word);
+        const beforeConjunction = inputSentence.substring(0, conjunctionIndex).trim();
+        const fromConjunction = inputSentence.substring(conjunctionIndex).trim();
+        
+        // Ha a kötőszó a mondat elején van, akkor az első rész a mellékmondat
+        let mainClause = '';
+        let subordinateClause = '';
+        
+        if (conjunctionIndex < 10) {
+          // A kötőszó a mondat elején van
+          const parts = inputSentence.split(',');
+          if (parts.length >= 2) {
+            subordinateClause = parts[0].trim();
+            mainClause = parts.slice(1).join(',').trim();
+          } else {
+            subordinateClause = fromConjunction;
+            mainClause = beforeConjunction || '(implicit főmondat)';
+          }
+        } else {
+          // A kötőszó a mondat közepén/végén van
+          mainClause = beforeConjunction;
+          subordinateClause = fromConjunction;
+        }
+        
         setResult({
           type: data.type,
           subtype: data.subtype,
           explanation: data.explanation,
-          confidence: 'magas'
+          confidence: 'magas',
+          mainClause,
+          subordinateClause
         });
         return;
       }
@@ -136,7 +165,21 @@ const AnalyzerSection = () => {
                 <p className="text-base text-muted-foreground mb-3">
                   {result.explanation}
                 </p>
-                <p className="text-sm text-muted-foreground italic">
+                
+                {result.type === 'alárendelő' && result.mainClause && result.subordinateClause && (
+                  <div className="mt-4 space-y-3">
+                    <div className="bg-primary/5 p-4 rounded-lg border border-primary/20">
+                      <p className="text-sm font-semibold text-primary mb-1">Főmondat:</p>
+                      <p className="text-base text-foreground">{result.mainClause}</p>
+                    </div>
+                    <div className="bg-secondary/5 p-4 rounded-lg border border-secondary/20">
+                      <p className="text-sm font-semibold text-secondary mb-1">Mellékmondat:</p>
+                      <p className="text-base text-foreground">{result.subordinateClause}</p>
+                    </div>
+                  </div>
+                )}
+                
+                <p className="text-sm text-muted-foreground italic mt-3">
                   Elemzés megbízhatósága: {result.confidence}
                 </p>
               </div>
